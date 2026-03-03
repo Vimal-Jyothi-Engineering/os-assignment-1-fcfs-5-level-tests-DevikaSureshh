@@ -1,33 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() 
+int main()
 {
     int n;
     scanf("%d", &n);
 
     int pid[100], at[100], bt[100];
     int wt[100], tat[100];
+    int order[100];   // to preserve input order
 
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
     {
         char pname[20];
         scanf("%s %d %d", pname, &at[i], &bt[i]);
         pid[i] = atoi(pname + 1);
+        order[i] = i;   // store original position
     }
 
-    // Sort by Arrival Time
+    // Sort by Arrival Time (Stable FCFS)
     for (int i = 0; i < n - 1; i++)
     {
         for (int j = 0; j < n - i - 1; j++)
         {
-            if (at[j] > at[j + 1])
+            if (at[j] > at[j+1] || 
+               (at[j] == at[j+1] && order[j] > order[j+1]))
             {
                 int t;
 
-                t = at[j];  at[j] = at[j+1];  at[j+1] = t;
-                t = bt[j];  bt[j] = bt[j+1];  bt[j+1] = t;
+                t = at[j]; at[j] = at[j+1]; at[j+1] = t;
+                t = bt[j]; bt[j] = bt[j+1]; bt[j+1] = t;
                 t = pid[j]; pid[j] = pid[j+1]; pid[j+1] = t;
+                t = order[j]; order[j] = order[j+1]; order[j+1] = t;
             }
         }
     }
@@ -38,7 +42,7 @@ int main()
     for (int i = 0; i < n; i++)
     {
         if (cur < at[i])
-            cur = at[i];     // CPU idle case
+            cur = at[i];
 
         wt[i] = cur - at[i];
         tat[i] = wt[i] + bt[i];
