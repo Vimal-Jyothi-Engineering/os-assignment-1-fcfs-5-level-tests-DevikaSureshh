@@ -8,23 +8,23 @@ int main()
 
     int pid[100], at[100], bt[100];
     int wt[100], tat[100];
-    int order[100];   // to preserve input order
+    int order[100];
 
-    for (int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
     {
         char pname[20];
         scanf("%s %d %d", pname, &at[i], &bt[i]);
         pid[i] = atoi(pname + 1);
-        order[i] = i;   // store original position
+        order[i] = i;   // store input order
     }
 
-    // Sort by Arrival Time (Stable FCFS)
-    for (int i = 0; i < n - 1; i++)
+    // Stable sorting by arrival time
+    for(int i = 0; i < n - 1; i++)
     {
-        for (int j = 0; j < n - i - 1; j++)
+        for(int j = 0; j < n - i - 1; j++)
         {
-            if (at[j] > at[j+1] || 
-               (at[j] == at[j+1] && order[j] > order[j+1]))
+            if(at[j] > at[j+1] || 
+              (at[j] == at[j+1] && order[j] > order[j+1]))
             {
                 int t;
 
@@ -36,13 +36,12 @@ int main()
         }
     }
 
-    // Proper FCFS Calculation
     int cur = 0;
 
-    for (int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
     {
-        if (cur < at[i])
-            cur = at[i];
+        if(cur < at[i])
+            cur = at[i];   // CPU idle
 
         wt[i] = cur - at[i];
         tat[i] = wt[i] + bt[i];
@@ -52,7 +51,7 @@ int main()
 
     double avgWT = 0, avgTAT = 0;
 
-    for (int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
     {
         avgWT += wt[i];
         avgTAT += tat[i];
@@ -62,11 +61,11 @@ int main()
     avgTAT /= n;
 
     printf("Waiting Time:\n");
-    for (int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
         printf("P%d %d\n", pid[i], wt[i]);
 
     printf("Turnaround Time:\n");
-    for (int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
         printf("P%d %d\n", pid[i], tat[i]);
 
     printf("Average Waiting Time: %.2f\n", avgWT);
